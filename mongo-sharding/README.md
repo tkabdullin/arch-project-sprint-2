@@ -2,20 +2,20 @@
 
 ## Как запустить
 
-Запускаем mongodb и приложение
+1. Запуск mongodb и приложения
 
 ```shell
 docker compose up -d
 ```
 
-Инициализация
+2. Инициализация
 
 ```shell
 docker exec -it configSrv mongosh --port 27017 --eval `
   "rs.initiate({ _id: 'config_server', configsvr: true, members: [{ _id: 0, host: 'configSrv:27017' }] });"
 ```
 
-Инициализация шарды
+3. Инициализация шарды
 ```shell
 docker exec -it shard1 mongosh --port 27018 --eval `
     "rs.initiate({ _id : 'shard1', members: [ { _id : 0, host : 'shard1:27018' }]})"
@@ -26,7 +26,7 @@ docker exec -it shard2 mongosh --port 27019 --eval `
 ```
 
 
-Инцициализация роутера и наполнение его тестовыми данными:
+4. Инцициализация роутера и наполнение его тестовыми данными:
 ```shell
 
 docker exec -i mongos_router mongosh --port 27020 --quiet <<EOF
@@ -48,7 +48,7 @@ EOF
 ```
 
 
-Проверки на шардах
+5. Проверки на шардах
 ```shell
 
 mongosh --port 27018 --quiet <<EOF
@@ -69,8 +69,6 @@ EOF
 ```shell
 
 http://localhost:8080
-
-Open API http://localhost:8080/docs 
 
 ```
 
