@@ -73,18 +73,3 @@ exit
 
 
 ```
-
-Открыть в браузере
-```shell
-
-http://localhost:8080
-
-```
-
-
-Open API
-```shell
-
-http://localhost:8080/docs 
-
-```
