@@ -1,35 +1,30 @@
 # pymongo-api
 
+Финальное решение находится в папке sharding-repl-cache.
+Инструкции по запуску идентичны для всех стадий решения.
+
 ## Как запустить
 
-Запускаем mongodb и приложение
-
-```shell
-docker compose up -d
+```
+make start
 ```
 
-Заполняем mongodb данными
+```
+make config
+```
 
-```shell
-./scripts/mongo-init.sh
+### Как остановить
+```
+make stop
 ```
 
 ## Как проверить
 
-### Если вы запускаете проект на локальной машине
+http://localhost:8081
 
-Откройте в браузере http://localhost:8080
-
-### Если вы запускаете проект на предоставленной виртуальной машине
-
-Узнать белый ip виртуальной машины
-
-```shell
-curl --silent http://ifconfig.me
+```
+make check
 ```
 
-Откройте в браузере http://<ip виртуальной машины>:8080
-
-## Доступные эндпоинты
-
-Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
+## Диаграмма архитектуры
+[Схема](https://www.dropbox.com/scl/fi/5bj7d9f3dz3w2i0e6l4x5/yandex_practicum_sprint_2.drawio?rlkey=kabg3pdhzsqgrg0mds7vxctf8&dl=0)
