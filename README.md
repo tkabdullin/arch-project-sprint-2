@@ -1,35 +1,8 @@
-# pymongo-api
+# Спринт 2
 
-## Как запустить
+- Задание 1, 5 и 6 находятся в [daraw.io](./task1.drawio)
+- Задание 2 в папке [mongo-sharding](./mongo-sharding/README.md)
+- Задание 3 в папке [mongo-sharding-repl](./mongo-sharding-repl/README.md)
+- Задание 4 в папке [sharding-repl-cache](./sharding-repl-cache/README.md)
 
-Запускаем mongodb и приложение
-
-```shell
-docker compose up -d
-```
-
-Заполняем mongodb данными
-
-```shell
-./scripts/mongo-init.sh
-```
-
-## Как проверить
-
-### Если вы запускаете проект на локальной машине
-
-Откройте в браузере http://localhost:8080
-
-### Если вы запускаете проект на предоставленной виртуальной машине
-
-Узнать белый ip виртуальной машины
-
-```shell
-curl --silent http://ifconfig.me
-```
-
-Откройте в браузере http://<ip виртуальной машины>:8080
-
-## Доступные эндпоинты
-
-Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
+Для удобства, в каждой папке помимо набора скриптов, есть общий скрипт `init_all.sh` который готовит кластер mongo.
