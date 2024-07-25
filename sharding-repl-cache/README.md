@@ -10,14 +10,14 @@ make start
 make config
 ```
 
-### Как остановить
+### Как остановить 
 ```
 make stop
 ```
 
 ## Как проверить
 
-http://localhost:8081/
+http://localhost:8081/docs
 
 ```
 make check

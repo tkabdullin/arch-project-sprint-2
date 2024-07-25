@@ -1,4 +1,5 @@
-name: mongo-sharding-repl
+name: sharding-repl-cache
+
 services:
   configSrv:
     image: mongo:latest
@@ -206,6 +207,14 @@ services:
     environment:
       MONGODB_URL: "mongodb://173.17.0.7:27020"
       MONGODB_DATABASE_NAME: "somedb"
+      REDIS_URL: "redis://173.17.0.16:6379"
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      app-network:
+        ipv4_address: 173.17.0.16
 
 networks:
   app-network:

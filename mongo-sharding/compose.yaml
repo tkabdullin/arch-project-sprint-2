@@ -1,15 +1,15 @@
+name: mongo-sharding
 services:
   configSrv:
     image: mongo:latest
     container_name: configSrv
     restart: always
-    ports:
-      - "27017:27017"
     networks:
       app-network:
         ipv4_address: 173.17.0.10
     volumes:
       - config-data:/data/db
+      - ./scripts:/scripts
     command:
       [
         "--configsvr",  #запуск в режиме конфигурации
@@ -29,13 +29,12 @@ services:
     image: mongo:latest
     container_name: shard1
     restart: always
-    ports:
-      - "27018:27018"
     networks:
       app-network:
         ipv4_address: 173.17.0.9
     volumes:
       - shard1-data:/data/db
+      - ./scripts:/scripts
     command:
       [
         "--shardsvr", #запуск в режиме шардинга
@@ -43,10 +42,10 @@ services:
         "shard1", #название реплики
         "--bind_ip_all",
         "--port",
-        "27018"
+        "27017"
       ]
     healthcheck:
-      test: [ "CMD", "mongosh", "--port 27018", "--eval", "db.adminCommand('ping')" ]
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
       interval: 5s
       start_period: 10s
 
@@ -55,13 +54,12 @@ services:
     image: mongo:latest
     container_name: shard2
     restart: always
-    ports:
-      - "27019:27019"
     networks:
       app-network:
         ipv4_address: 173.17.0.8
     volumes:
       - shard2-data:/data/db
+      - ./scripts:/scripts
     command:
       [
         "--shardsvr", #запуск в режиме шардинга
@@ -69,7 +67,7 @@ services:
         "shard2", #название реплик
         "--bind_ip_all", # обратите внимание - она отличается от реплики 1-го шарда
         "--port",
-        "27019"
+        "27017"
       ]
     healthcheck:
       test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
@@ -81,8 +79,6 @@ services:
     image: mongo:latest
     container_name: mongos_router
     restart: always
-    ports:
-      - "27020:27020"
     networks:
       app-network:
         ipv4_address: 173.17.0.7
@@ -93,14 +89,16 @@ services:
         "config_server/configSrv:27017", #передача данных сервера конфигурации
         "--bind_ip_all",
         "--port",
-        "27020"
+        "27017"
       ]
     depends_on:
       - configSrv
       - shard1
       - shard2
+    volumes:
+      - ./scripts:/scripts
     healthcheck:
-      test: [ "CMD", "mongosh", "--port 27020", "--eval", "db.adminCommand('ping').ok"]
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping').ok"]
       interval: 5s
       start_period: 20s
 
@@ -118,7 +116,7 @@ services:
     ports:
       - 8081:8080
     environment:
-      MONGODB_URL: "mongodb://173.17.0.7:27020"
+      MONGODB_URL: "mongodb://173.17.0.7:27017"
       MONGODB_DATABASE_NAME: "somedb"
 
 networks:

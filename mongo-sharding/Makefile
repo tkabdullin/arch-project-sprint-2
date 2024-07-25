@@ -2,25 +2,38 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 .PHONY: config
 config:
-	@echo "Initializing app..."
-	@bash ./scripts/config.sh
+	@$(MAKE) init_config
 	@sleep 5
-	@bash ./scripts/shard.sh
+	@$(MAKE) init_shards
 	@sleep 5
-	@bash ./scripts/router.sh
+	@$(MAKE) init_router
+
+init_config:
+	@echo "Config server"
+	@docker compose exec configSrv sh -c "mongosh < /scripts/config.js"
+
+init_shards:
+	@echo "Config shards"
+	@docker compose exec shard1 sh -c "mongosh < /scripts/shard1.js"
+	@docker compose exec shard2 sh -c "mongosh < /scripts/shard2.js"
+
+init_router:
+	@echo "Config router"
+	@docker compose exec mongos_router sh -c "mongosh < /scripts/router.js"
+
 
 .PHONY: start
 start:
 	@echo "Starting app..."
 	@docker compose up -d --build
 
-down:
+stop:
 	@echo "Stopping app..."
-	@docker compose down
+	@docker compose down -v
 
 .PHONY: check_shard1
 check_shards:
 	@echo "Checking shard1 documents"
-	@docker exec -it shard1 mongosh --port 27018 --eval "use somedb;" --eval "db.helloDoc.countDocuments();"
-	@docker exec -it shard2 mongosh --port 27019 --eval "use somedb;" --eval "db.helloDoc.countDocuments();"
+	@docker exec -it shard1 mongosh --eval "use somedb;" --eval "db.helloDoc.countDocuments();"
+	@docker exec -it shard2 mongosh --eval "use somedb;" --eval "db.helloDoc.countDocuments();"
 
