@@ -19,7 +19,7 @@ init_shards:
 
 init_router:
 	@echo "Config router"
-	@docker compose exec mongos_router sh -c "mongosh --port 27020 < /scripts/router.js"
+	@docker compose exec mongos_router sh -c "mongosh  < /scripts/router.js"
 
 
 .PHONY: start

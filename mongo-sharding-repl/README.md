@@ -17,7 +17,7 @@ make stop
 
 ## Как проверить
 
-http://localhost:8081/docs
+http://localhost:8081
 
 ```
 make check
