@@ -59,7 +59,7 @@ sh.shardCollection("somedb.helloDoc", { "name" : "hashed" } );
 Для наполнения данными используется скрипт [fill_data.sh](./fill_data.sh):
 ```bash
 use somedb
-for(var i = 0; i < 1000; i++) db.helloDoc.insert({age:i, name:"ly"+i});
+for(var i = 0; i < 2000; i++) db.helloDoc.insert({age:i, name:"ly"+i});
 ```
 
 ## Проверка наполнения
