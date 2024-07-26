@@ -13,7 +13,7 @@ services:
   # сервер конфигурации
   configSrv:
     image: mongo:latest
-    container_name: cconfigSrv
+    container_name: configSrv
     restart: always
     ports:
       - "27017:27017"
