@@ -10,11 +10,13 @@ rs.initiate(
     _id : "config-server",
     configsvr: true,
     members: [
-      { _id : 0, host : "config-srv:27017" }
+      { _id : 0, host : "configSrv:27017" }
     ]
   }
 );
 EOF
+
+sleep 1
 
 docker compose exec -T shard1_master mongosh --port 27010 --quiet <<EOF
 rs.initiate(
@@ -29,14 +31,16 @@ rs.initiate(
 );
 EOF
 
+sleep 1
+
 docker compose exec -T shard2_master mongosh --port 27013 --quiet <<EOF
 rs.initiate(
     {
       _id : "shard2",
       members: [
         { _id : 0, host : "shard2_master:27013" },
-        { _id : 1, host : "shard2_secondary1:27014" },
-        { _id : 2, host : "shard2_secondary2:27015" }
+        { _id : 1, host : "shard2_slave1:27014" },
+        { _id : 2, host : "shard2_slave2:27015" }
       ]
     }
 );
