@@ -1,8 +1,6 @@
-# sharding-repl-cache
+# mongo-sharding-repl
 
 ## Как запустить
-
-Перейти в директорию sharding-repl-cache
 
 Запускаем mongodb и приложение
 
@@ -16,11 +14,6 @@ docker compose up -d
 ./scripts/sharding-init.sh
 ```
 
-## Как проверить
-
-Проверка JSON ответа сервера:
-Откройте в браузере http://localhost:8080
-
 Проверка shard-1 на количество документов
 
 ```shell
@@ -33,8 +26,8 @@ docker compose up -d
 ./scripts/shard-2-check-count.sh
 ```
 
+После проверки необходимо удалить контейнеры, сеть и тома
 
-## Ссылка на диаграмму
 ```shell
-https://drive.google.com/file/d/1kO2wXX8BBlgbeNrHXNbKailQfWbSqqde/view?usp=sharing
+docker compose down -v
 ```

@@ -32,9 +32,3 @@ docker compose up -d
 ```shell
 ./scripts/shard-2-check-count.sh
 ```
-
-
-## Ссылка на диаграмму
-```shell
-https://drive.google.com/file/d/1kO2wXX8BBlgbeNrHXNbKailQfWbSqqde/view?usp=sharing
-```
