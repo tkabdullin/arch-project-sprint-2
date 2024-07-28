@@ -27,3 +27,9 @@ curl --silent http://ifconfig.me
 ## Доступные эндпоинты
 
 Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
+
+
+
+
+
+[Итоговая схема](diagram.drawio)
