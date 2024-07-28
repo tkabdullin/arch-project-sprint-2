@@ -2,17 +2,11 @@
 
 ## Как запустить
 
-Запускаем mongodb и приложение
+[mongo-sharding](mongo-sharding/README.md)
 
-```shell
-docker compose up -d
-```
+[mongo-sharding-repl](mongo-sharding-repl/README.md)
 
-Заполняем mongodb данными
-
-```shell
-./scripts/mongo-init.sh
-```
+[sharding-repl-cache](sharding-repl-cache/README.md)
 
 ## Как проверить
 
