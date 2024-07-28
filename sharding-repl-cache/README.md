@@ -17,7 +17,7 @@ docker compose up -d
 ./scripts/init.sh
 
 ```
-```для возрата в Git Bash
+```shell
 
 exit
 
