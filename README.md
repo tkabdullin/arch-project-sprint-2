@@ -1,35 +1,19 @@
-# pymongo-api
+# Проектная работа 2
 
-## Как запустить
+## API Gateway - Discovery
 
-Запускаем mongodb и приложение
+![Схема](docs/task1-cdn.drawio.png)
 
-```shell
+## Запуск
+
+```bash
+cd sharding-repl-cache-gateway
 docker compose up -d
-```
 
-Заполняем mongodb данными
+sleep 60
 
-```shell
 ./scripts/mongo-init.sh
 ```
+> Consul discovery @ `http://127.0.0.1:8500`
 
-## Как проверить
-
-### Если вы запускаете проект на локальной машине
-
-Откройте в браузере http://localhost:8080
-
-### Если вы запускаете проект на предоставленной виртуальной машине
-
-Узнать белый ip виртуальной машины
-
-```shell
-curl --silent http://ifconfig.me
-```
-
-Откройте в браузере http://<ip виртуальной машины>:8080
-
-## Доступные эндпоинты
-
-Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
+> API calls via `http://127.0.0.1:9080`

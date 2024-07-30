@@ -1,0 +1,69 @@
+version: '3.8'
+name: mongo-sharding
+
+services:
+
+  pymongo_api:
+    image: kazhem/pymongo_api:1.0.0
+    ports:
+      - "8000:8080"
+    environment:
+      MONGODB_URL: ${MONGODB_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+    networks:
+      - mongo-cluster
+
+  config_srv:
+    image: mongo:latest
+    container_name: config_srv
+    command: mongod --configsvr --replSet configSrv --bind_ip_all --port 27017
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./volumes/config-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard1:
+    image: mongo:latest
+    container_name: shard1
+    command: mongod --shardsvr --replSet shard1 --bind_ip_all --port 27018
+    restart: always
+    ports:
+      - "27018:27018"
+    volumes:
+      - ./volumes/shard1-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard2:
+    image: mongo:latest
+    container_name: shard2
+    command: mongod --shardsvr --replSet shard2 --bind_ip_all --port 27019
+    restart: always
+    ports:
+      - "27019:27019"
+    volumes:
+      - ./volumes/shard2-data:/data/db
+    networks:
+      - mongo-cluster
+
+  mongos_router:
+    image: mongo:latest
+    container_name: mongos_router
+    command: mongos --configdb configSrv/config_srv:27017 --bind_ip_all --port 27020
+    restart: always
+    ports:
+      - "27020:27020"
+    networks:
+      - mongo-cluster
+
+networks:
+  mongo-cluster:
+    driver: bridge
+
+volumes:
+  config-data:
+  shard1-data:
+  shard2-data:

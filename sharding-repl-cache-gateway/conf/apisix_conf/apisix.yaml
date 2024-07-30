@@ -1,0 +1,18 @@
+upstreams:
+  - id: 2
+    name: test
+    discovery_type: consul
+    pass_host: pass
+    service_name: pymongo-svc
+    type: roundrobin
+    timeout:
+      connect: 6
+      send: 6
+      read: 6
+
+routes:
+  - uri: /*
+    name: config-test
+    upstream_id: 2
+
+#END

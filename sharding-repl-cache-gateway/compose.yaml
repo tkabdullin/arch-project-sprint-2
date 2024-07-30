@@ -1,0 +1,185 @@
+version: '3.8'
+name: sharding-repl-cache-gateway
+
+services:
+
+  apisix-dashboard:
+    image: apache/apisix-dashboard:3.0.0-alpine
+    restart: always
+    volumes:
+      - ./conf/dashboard_conf/config.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    ports:
+      - "9000:9000"
+    networks:
+      - mongo-cluster
+
+  apisix:
+    image: apache/apisix:latest
+    restart: always
+    volumes:
+      - ./conf/apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./conf/apisix_conf/apisix.yaml:/usr/local/apisix/conf/apisix.yaml:ro
+    ports:
+      - "9080:9080"
+      - "9443:9443"
+      - "9090:9090"
+#    depends_on:
+#      - etcd
+    networks:
+      - mongo-cluster
+
+  etcd:
+    image: bitnami/etcd:3.4.15
+    restart: always
+    environment:
+      ETCD_ENABLE_V2: "true"
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
+      ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+    ports:
+      - "12379:2379"
+    volumes:
+      - ./volumes/etcd_data:/bitnami/etcd
+    networks:
+      - mongo-cluster
+
+  consul:
+    image: consul:1.15.1
+    container_name: consul
+    restart: always
+    ports:
+      - '8500:8500'
+    command: 'agent -server -bootstrap-expect=1 -ui -node=agent-one -client 0.0.0.0 -log-level info -data-dir=/consul/data -enable-script-checks'
+    networks:
+      - mongo-cluster
+
+  pymongo_api:
+    build:
+      context: ./api_app
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVICE_PORT}
+    deploy:
+      replicas: ${NO_REPLICAS}
+    environment:
+      MONGODB_URL: ${MONGODB_URL}
+      MONGODB_DATABASE_NAME: ${MONGODB_DATABASE_NAME}
+      REDIS_URL: ${REDIS_URL}
+      CONSUL_HOST: ${CONSUL_HOST}
+      CONSUL_PORT: ${CONSUL_PORT}
+      SERVICE_NAME: ${SERVICE_NAME}
+      SERVICE_PORT: ${SERVICE_PORT}
+    networks:
+      - mongo-cluster
+
+  redis_srv:
+    image: "redis:latest"
+    container_name: redis_srv
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis_srv_data:/data
+    networks:
+      - mongo-cluster
+
+  config_srv:
+    image: mongo:latest
+    container_name: config_srv
+    command: mongod --configsvr --replSet configSrv --bind_ip_all --port 27017
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./volumes/config-data:/data/db
+    networks:
+      - mongo-cluster
+    healthcheck:
+      test: "mongo --eval 'db.runCommand(\"ping\")' --port 27017"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  shard1a:
+    image: mongo:latest
+    container_name: shard1a
+    command: mongod --shardsvr --replSet shard1rs --bind_ip_all --port 27018
+    restart: always
+    volumes:
+      - ./volumes/shard1a-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard1b:
+    image: mongo:latest
+    container_name: shard1b
+    command: mongod --shardsvr --replSet shard1rs --bind_ip_all --port 27018
+    restart: always
+    volumes:
+      - ./volumes/shard1b-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard1c:
+    image: mongo:latest
+    container_name: shard1c
+    command: mongod --shardsvr --replSet shard1rs --bind_ip_all --port 27018
+    restart: always
+    volumes:
+      - ./volumes/shard1c-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard2a:
+    image: mongo:latest
+    container_name: shard2a
+    command: mongod --shardsvr --replSet shard2rs --bind_ip_all --port 27019
+    restart: always
+    volumes:
+      - ./volumes/shard2a-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard2b:
+    image: mongo:latest
+    container_name: shard2b
+    command: mongod --shardsvr --replSet shard2rs --bind_ip_all --port 27019
+    restart: always
+    volumes:
+      - ./volumes/shard2b-data:/data/db
+    networks:
+      - mongo-cluster
+
+  shard2c:
+    image: mongo:latest
+    container_name: shard2c
+    command: mongod --shardsvr --replSet shard2rs --bind_ip_all --port 27019
+    restart: always
+    volumes:
+      - ./volumes/shard2c-data:/data/db
+    networks:
+      - mongo-cluster
+
+  mongos_router:
+    image: mongo:latest
+    container_name: mongos_router
+    command: mongos --configdb configSrv/config_srv:27017 --bind_ip_all --port 27020
+    restart: always
+    ports:
+      - "27020:27020"
+    networks:
+      - mongo-cluster
+
+networks:
+  mongo-cluster:
+    driver: bridge
+
+volumes:
+  config-data:
+  shard1a-data:
+  shard1b-data:
+  shard1c-data:
+  shard2a-data:
+  shard2b-data:
+  shard2c-data:
+  etcd_data:
+    driver: local
