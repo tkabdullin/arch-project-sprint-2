@@ -128,4 +128,9 @@ networks:
         - subnet: 173.17.0.0/16
 
 volumes:
+  config-data:
+  shard1-data:
+  shard2-data:
+
+volumes:
   mongodb1_data_container:
