@@ -99,12 +99,6 @@ services:
       interval: 5s
       start_period: 10s
 
-  mongodb1:
-    container_name: mongodb1
-    image: dh-mirror.gitverse.ru/mongo:latest
-    volumes:
-      - mongodb1_data_container:/data/db
-
   pymongo_api:
     container_name: pymongo_api
     build: 
@@ -131,6 +125,3 @@ volumes:
   config-data:
   shard1-data:
   shard2-data:
-
-volumes:
-  mongodb1_data_container:
