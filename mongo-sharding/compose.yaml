@@ -1,3 +1,5 @@
+name: mongo-sharding
+
 services:
   mongodb1:
     container_name: mongodb1
