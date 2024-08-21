@@ -5,12 +5,14 @@
 Запускаем mongodb и приложение
 
 ```shell
+cd mongo-sharding
 docker compose up -d
 ```
 
 Заполняем mongodb данными
 
 ```shell
+cd mongo-sharding
 ./scripts/mongo-init.sh
 ```
 
