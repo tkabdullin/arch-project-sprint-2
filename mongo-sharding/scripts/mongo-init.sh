@@ -42,3 +42,7 @@ sh.shardCollection("somedb.helloDoc", { "name" : "hashed" } )
 use somedb
 for(var i = 0; i < 1000; i++) db.helloDoc.insert({age:i, name:"ly"+i})
 EOF
+
+docker exec -it mongo-sharding-mongos_router2 mongosh --port 27021 <<EOF
+db.adminCommand({ getShardMap: 1 })
+EOF
