@@ -1,19 +1,23 @@
 # pymongo-api
 
+## Схема решения
+[task1.drawio](./task1.drawio)
+
 ## Как запустить
 
 Запускаем mongodb и приложение
 
 ```shell
-cd mongo-sharding
+cd sharding-repl-cache
 docker compose up -d
 ```
 
 Заполняем mongodb данными
 
 ```shell
-cd mongo-sharding
+cd sharding-repl-cache
 ./scripts/mongo-init.sh
+./scripts/redis-init.sh
 ```
 
 ## Как проверить
@@ -35,3 +39,5 @@ curl --silent http://ifconfig.me
 ## Доступные эндпоинты
 
 Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
+
+**ВНИМАНИЕ!** Сделайте запрос на основной эндпоинт / ДВАЖДЫ (в силу особенностей подключения к кластеру для получения данных о топологии из подключения необходимо сделать повторный запрос при первоначальном запуске)
