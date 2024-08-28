@@ -30,6 +30,26 @@ curl --silent http://ifconfig.me
 
 Откройте в браузере http://<ip виртуальной машины>:8080
 
+### Чтобы проверить кол-во документов на 1 шарде:
+
+```shell
+docker exec -it shard1 mongosh --port 27018
+
+> use somedb;
+> db.helloDoc.countDocuments();
+> exit(); 
+```
+
+### Чтобы проверить кол-во документов на 2 шарде:
+
+```shell
+docker exec -it shard2 mongosh --port 27019
+
+> use somedb;
+> db.helloDoc.countDocuments();
+> exit(); 
+```
+
 ## Доступные эндпоинты
 
 Список доступных эндпоинтов, swagger http://<ip виртуальной машины>:8080/docs
