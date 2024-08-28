@@ -182,6 +182,7 @@ services:
       - "6379"
     volumes:
       - redis1-data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
 
   pymongo_api:
     container_name: pymongo_api
