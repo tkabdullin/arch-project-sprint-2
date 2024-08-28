@@ -4,7 +4,7 @@
 
 Из директории sharding-repl-cache:
 
-Запускаем mongodb и приложение
+Запускаем mongodb, redis и приложение
 
 ```shell
 docker compose up -d
