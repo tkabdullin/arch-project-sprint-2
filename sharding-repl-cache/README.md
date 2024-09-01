@@ -75,6 +75,12 @@ exit();
  ```
 
 ```shell
+docker compose exec -T repl12 mongosh
+db.helloDoc.countDocuments();
+exit();
+ ```
+
+```shell
 docker compose exec -T repl13 mongosh
 use somedb
 db.helloDoc.countDocuments();
@@ -104,5 +110,6 @@ exit();
 
 ```shell
 docker exec -it repl12 mongosh
-db.adminCommand( { replSetGetStatus: 1 } ).
+rs.status().members.length;
+exit();
 ```
