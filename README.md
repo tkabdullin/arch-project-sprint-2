@@ -8,10 +8,22 @@
 docker compose up -d
 ```
 
-Заполняем mongodb данными
+Инициализируем шарды mongodb и заполняем тестовыми данными:
 
 ```shell
-./scripts/mongo-init.sh
+./scripts/mongo-init-configSrv.sh
+```
+
+```shell
+./scripts/mongo-init-shards.sh
+```
+
+```shell
+./scripts/mongo-init-router.sh
+```
+
+```shell
+./scripts/mongo-init-fixtures.sh
 ```
 
 ## Как проверить
