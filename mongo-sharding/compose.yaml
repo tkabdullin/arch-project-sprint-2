@@ -1,0 +1,174 @@
+name: mongo-sharding-repl
+services:
+  configSrv:
+    image: mongo:latest # docker образ
+    container_name: configSrv 
+    restart: always
+    ports:
+      - "27030:27030"
+    volumes:
+      - config-data:/data/db
+    networks:
+      app-network:
+        ipv4_address: 173.17.0.30
+    command:
+      [
+        "--configsvr",
+        "--replSet",
+        "config_server",
+        "--bind_ip_all",
+        "--port",
+        "27030"
+      ] 
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  router:
+    image: mongo:latest
+    container_name: router
+    restart: always
+    ports:
+      - "27040:27040"
+    networks:
+      app-network:
+        ipv4_address: 173.17.0.40
+    command:
+      [
+        "mongos",
+        "--configdb",
+        "config_server/configSrv:27030",
+        "--bind_ip_all",
+        "--port",
+        "27040"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  shard1:
+    image: mongo:latest
+    container_name: shard1
+    restart: always
+    ports:
+      - "27010:27010"
+    volumes:
+      - shard1-data:/data/db
+    networks:
+      app-network:
+        ipv4_address: 173.17.0.10
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "shard1",
+        "--bind_ip_all",
+        "--port",
+        "27010"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  shard2:
+    image: mongo:latest
+    container_name: shard2
+    restart: always
+    ports:
+      - "27020:27020"
+    volumes:
+      - shard2-data:/data/db
+    networks:
+      app-network:
+        ipv4_address: 173.17.0.20
+    command:
+      [
+        "--shardsvr",
+        "--replSet",
+        "shard2",
+        "--bind_ip_all",
+        "--port",
+        "27020"
+      ]
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 5s
+      start_period: 10s
+
+  pymongo_api:
+        container_name: pymongo_api
+        build:
+          context: api_app
+          dockerfile: Dockerfile
+        image: kazhem/pymongo_api:1.0.0
+        depends_on:
+          - router
+        ports:
+          - 8080:8080
+        environment:
+          MONGODB_URL: "mongodb://router:27040"
+          MONGODB_DATABASE_NAME: "somedb"
+
+  mongosetup:
+    image: mongo:latest
+    container_name: mongosetup
+    depends_on:
+      - configSrv
+      - router
+      - shard1
+      - shard2
+    networks:
+      app-network:
+        ipv4_address: 173.17.0.50
+    restart: "no"
+    entrypoint: [ "bash", "-c", "sleep 10 &&
+      echo mongosetup_step_1 && 
+      mongosh --host configSrv --port 27030 --eval 'rs.initiate(
+        {
+          _id : \"config_server\",
+            configsvr: true,
+            members: [
+              { _id : 0, host : \"configSrv:27030\" }]
+        });' &&
+      echo mongosetup_step_2 &&
+      mongosh --host shard1 --port 27010 --eval 'rs.initiate(
+        {
+          _id: \"shard1\",
+          members: [
+            { _id: 0, host: \"shard1:27010\" }
+          ]
+        });' &&
+      echo mongosetup_step_3 &&
+      mongosh --host shard2  --port 27020 --eval 'rs.initiate(
+        {
+          _id: \"shard2\",
+          members: [
+            { _id: 1, host: \"shard2:27020\" }
+          ]
+        });' &&
+      echo mongosetup_step_4 && sleep 10 &&
+      mongosh --host router --port 27040 --eval '
+        sh.addShard( \"shard1/shard1:27010\");
+        sh.addShard( \"shard2/shard2:27020\");
+        sh.enableSharding(\"somedb\");
+        sh.shardCollection(\"somedb.helloDoc\", { \"name\" : \"hashed\" });' &&
+      echo mongosetup_step_5 &&
+      mongosh \"mongodb://router:27040/somedb\" --eval '
+        for(var i = 0; i < 1000; i++) { db.helloDoc.insert({age:i, name:\"ly\"+i}) };
+        db.helloDoc.countDocuments();'" ]
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.17.0.0/16
+
+volumes:
+  config-data:
+  shard1-data:
+  shard2-data:
