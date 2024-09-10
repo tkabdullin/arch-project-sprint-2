@@ -1,0 +1,15 @@
+rs.initiate(
+	{
+		"_id": "shard2",
+		"members": [
+			{
+				"_id": 1,
+				"host": "shard2:27019"
+			},
+			{
+				"_id": 11,
+				"host": "shard2_repl:27119"
+			}
+		]
+	}
+)
