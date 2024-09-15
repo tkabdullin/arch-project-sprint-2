@@ -39,12 +39,6 @@ docker-compose exec  mongos_router sh -c "mongosh --port 27020 < /scripts/router
 docker-compose exec  shard1 sh -c "mongosh --port 27018 < /scripts/init-replica-shard1.js"
 ```
 
-Инициализируем redis кластер
-
-```shell
-docker-compose exec  redis sh -c "echo "yes" | redis-cli --cluster create   redis:6379   redis2:6379   redis3:6379    redis4:6379  redis5:6379   redis6:6379   --cluster-replicas 1 redis-cli cluster nodes"
-```
-
 
 ### Если вы запускаете проект на локальной машине
 
