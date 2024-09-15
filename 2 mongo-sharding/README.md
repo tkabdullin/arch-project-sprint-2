@@ -34,11 +34,7 @@ docker-compose exec  mongos_router sh -c "mongosh --port 27020 < /scripts/router
 ```
 
 
-Инициализируем репликацию для шарда 1
-```shell
-docker-compose exec  shard1 sh -c "mongosh --port 27018 < /scripts/init-replica-shard1.js"
-```
-
+## Как проверить
 
 ### Если вы запускаете проект на локальной машине
 

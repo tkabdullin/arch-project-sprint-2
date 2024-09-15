@@ -40,6 +40,9 @@ docker-compose exec  shard1 sh -c "mongosh --port 27018 < /scripts/init-replica-
 ```
 
 
+
+## Как проверить
+
 ### Если вы запускаете проект на локальной машине
 
 Откройте в браузере http://localhost:8080
