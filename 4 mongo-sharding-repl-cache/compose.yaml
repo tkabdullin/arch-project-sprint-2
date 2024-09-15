@@ -165,76 +165,13 @@ services:
       - "6379"
     volumes:
       - redis1_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+      # - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: [ "redis-server" ]
     networks:
       app-network:
         ipv4_address: 173.17.0.12
 
-  redis2:
-    image: "redis:latest"
-    container_name: redis2
-    ports:
-      -  "6379"
-    volumes:
-      - redis2_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    networks:
-      app-network:
-        ipv4_address: 173.17.0.13
 
-  redis3:
-    image: "redis:latest"
-    container_name: redis3
-    ports:
-      -  "6379"
-    volumes:
-      - redis3_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    networks:
-      app-network:
-        ipv4_address: 173.17.0.14
-
-  redis4:
-    image: "redis:latest"
-    container_name: redis4
-    ports:
-      - "6379"
-    volumes:
-      - redis4_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    networks:
-      app-network:
-        ipv4_address: 173.17.0.15
-
-  redis5:
-    image: "redis:latest"
-    container_name: redis5
-    ports:
-      - "6379"
-    volumes:
-      - redis5_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    networks:
-      app-network:
-        ipv4_address: 173.17.0.16
-
-  redis6:
-    image: "redis:latest"
-    container_name: redis6
-    ports:
-      - "6379"
-    volumes:
-      - redis6_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    networks:
-      app-network:
-        ipv4_address: 173.17.0.17
 
 networks:
   app-network:
