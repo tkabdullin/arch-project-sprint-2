@@ -1,0 +1,1 @@
+docker exec -i shard1 mongosh --port 27018 < check-shard1.txt
