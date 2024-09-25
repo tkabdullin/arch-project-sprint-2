@@ -1,0 +1,10 @@
+rs.initiate(
+    {
+      _id : "shard1",
+      members: [
+        { _id: 0, host : "shard1:27018" },
+        { _id: 1, host: "shard1_repl:27118" }
+      ]
+    }
+);
+exit();

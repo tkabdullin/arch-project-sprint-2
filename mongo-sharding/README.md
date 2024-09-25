@@ -1,10 +1,7 @@
-# Ссылка на основную диаграмму, покрывающую все задания в спринте 2
-**ОБНОВЛЕННАЯ ССЫЛКА** на диаграммы для задания 1, 5 и 6 - https://app.diagrams.net/?title=sprint-2.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1sRBT4AENCEwSdlX1Q3DORSgAQfO343Q0%26export%3Ddownload
-
-# Основная последовательность действий для запуска общенастроенного проекта для спринта 2
+# mongo-sharding
 
 ## Как запустить
-**Все операции необходимо проводить в папке /sharding-repl-cache**
+**Все операции необходимо проводить в папке /mongo-sharding**
 
 Запускаем mongodb и приложение
 
@@ -39,10 +36,8 @@ docker compose up -d
 1. Открыть в браузере http://localhost:8080
 2. В режиме инспекции сделать повторный запрос и изучить ответ в формате Preview
 Количество шардов - 2
-Количество реплик - 2
 Количество документов - 1000
-Кеш включен - true
-![alt text](/sharding-repl-cache/repl-cache.png)
+![alt text](response-check.png)
 
 ## Проверка через БД
 

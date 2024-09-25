@@ -1,7 +1,4 @@
-# Ссылка на основную диаграмму, покрывающую все задания в спринте 2
-**ОБНОВЛЕННАЯ ССЫЛКА** на диаграммы для задания 1, 5 и 6 - https://app.diagrams.net/?title=sprint-2.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1sRBT4AENCEwSdlX1Q3DORSgAQfO343Q0%26export%3Ddownload
-
-# Основная последовательность действий для запуска общенастроенного проекта для спринта 2
+# sharding-repl-cache
 
 ## Как запустить
 **Все операции необходимо проводить в папке /sharding-repl-cache**
@@ -42,7 +39,7 @@ docker compose up -d
 Количество реплик - 2
 Количество документов - 1000
 Кеш включен - true
-![alt text](/sharding-repl-cache/repl-cache.png)
+![alt text](repl-cache.png)
 
 ## Проверка через БД
 

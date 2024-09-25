@@ -1,0 +1,9 @@
+sh.addShard( "shard1/shard1:27018","shard1_repl:27118");
+sh.addShard( "shard2/shard2:27019","shard2_repl:27119");
+
+sh.enableSharding("somedb");
+sh.shardCollection("somedb.helloDoc", { "name" : "hashed" } )
+
+use somedb
+
+for(var i = 0; i < 1000; i++) db.helloDoc.insert({age:i, name:"ly"+i})

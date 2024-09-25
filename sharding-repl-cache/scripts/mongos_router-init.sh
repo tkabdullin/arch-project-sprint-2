@@ -1,0 +1,1 @@
+docker exec -i mongos_router mongosh --port 27020 < mongos_router-init.txt
